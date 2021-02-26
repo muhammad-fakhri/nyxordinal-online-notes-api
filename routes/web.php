@@ -13,6 +13,6 @@
 |
 */
 
-$router->post('/update/{note_id}', 'NoteController@update');
+$router->post('/update', 'NoteController@update');
 $router->get('/{note_id}', 'NoteController@get');
 $router->get('/', 'NoteController@index');

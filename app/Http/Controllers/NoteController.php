@@ -33,11 +33,15 @@ class NoteController extends Controller
      */
     public function get($note_id)
     {
-        $note = Note::firstOrCreate(
-            ["title" => $note_id],
-            ["content" => ""]
-        );
-        return $this->successResponse(["note" => $note]);
+        try {
+            $note = Note::firstOrCreate(
+                ["title" => $note_id],
+                ["content" => ""]
+            );
+            return $this->successResponse($note);
+        } catch (\Exception $e) {
+            return $this->badRequestResponse($e);
+        }
     }
 
     /**
@@ -47,16 +51,20 @@ class NoteController extends Controller
      */
     public function update(Request $request)
     {
-        $this->validate($request, [
-            'note_id' => 'required',
-            'content' => 'required'
-        ]);
+        try {
+            $this->validate($request, [
+                'note_id' => 'required',
+                'content' => 'required'
+            ]);
 
-        $note = Note::updateOrCreate(
-            ["title" => $request->input('note_id')],
-            ["content" => $request->input('content')]
-        );
+            $note = Note::updateOrCreate(
+                ["title" => $request->input('note_id')],
+                ["content" => $request->input('content')]
+            );
 
-        return $this->successResponse(["note" => $note]);
+            return $this->successResponse($note);
+        } catch (\Exception $e) {
+            return $this->badRequestResponse($e);
+        }
     }
 }
